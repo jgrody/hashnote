@@ -1,0 +1,5 @@
+{
+  "name": "hashnote",
+  "app_id": "",
+  "gulpStartupTasks": ["sass", "watch"]
+}

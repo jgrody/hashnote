@@ -1,0 +1,83 @@
+$calm: #32C7FC;
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+@import "../www/lib/ionic/scss/ionic";
+.new-note-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	.note-form {
+		height: 100%;
+
+		.input-label {
+			width: 0;
+			height: 0;
+			margin: 0;
+			padding: 0;
+		}
+
+		.item-input {
+			height: 100%;
+		}
+
+	}
+
+	.note-form-display {
+		padding: 6px 0 5px 16px;
+	}
+
+	textarea {
+		height: 100%;
+	}
+
+}
+.error-box {
+	padding: 10px;
+	border: 1px solid darken($assertive, 10%);
+	background-color: $assertive;
+	border-radius: 4px;
+	margin-bottom: 10px;
+	p {
+		color: white;
+		margin: 0px;
+	}
+
+}
+.profile-image {
+	img {
+		border-radius: 50%;
+		margin: 10px;
+		border: 4px solid rgba(255,255,255,0.5);
+		;
+		-webkit-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
+		-moz-box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
+		box-shadow: 0px 0px 142px -37px rgba(0,0,0,0.75);
+	}
+
+}
+.hashtag {
+	color: red;
+}
+
+ion-view,.pane,.view {
+	background-color: #EEEEEE;
+}
+
+body.platform-ios {
+	font-family: Roboto, sans-serif;
+}
+
+.ionic-body.platform-ios {
+	font-family: Roboto, sans-serif;
+}
+
+body.platform-android {
+	font-family: Roboto, sans-serif;
+}
+
+.ionic-body.platform-android {
+	font-family: Roboto, sans-serif;
+}
+
+h1,h2,h3,h4,h5,h6,.h1,.h2,.h3,.h4,.h5,.h6,.tab-item,input,button,select,textarea {
+	font-family: inherit;
+}
