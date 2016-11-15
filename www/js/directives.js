@@ -10,22 +10,27 @@ angular.module('app.directives', [])
       '$parse',
       '$compile',
       '$state',
+      '$firebaseArray',
+      'HashtagService',
       function(
         $scope,
         $element,
         $attrs,
         $parse,
         $compile,
-        $state
+        $state,
+        $firebaseArray,
+        HashtagService
       ){
 
       var data = $parse($attrs.notePresenter)($scope);
 
+      var ref = firebase.database().ref();
+      var tags = ref.child('tags')
+      var list = $firebaseArray(tags);
+
       $scope.$watch('data.note', function (newVal, oldVal) {
-        if (
-          newVal && !oldVal ||
-          newVal == oldVal
-        ){
+        if (newVal && !oldVal || newVal == oldVal){
           parseTags();
         }
       })
@@ -36,13 +41,7 @@ angular.module('app.directives', [])
 
       function parseTags(){
         if (data.note){
-          var taggedText = data.note.replace(/[#]+[A-Za-z0-9-_]+/g, function(t) {
-            return t.replace(
-              t,
-              '<a class="hashtag" href="javascript:void(0)" ng-click="goToHashtag()">'+t+'</a>'
-            );
-          })
-
+          var taggedText = HashtagService.parse(data.note);
           var template = angular.element('<span>' + taggedText + '</span>');
           var element = $compile(template)($scope);
           $element.append(element[0]);

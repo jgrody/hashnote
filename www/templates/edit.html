@@ -6,10 +6,12 @@
     <div id="edit-container6" class="new-note-container">
       <form id="edit-form10" class="list note-form" ng-if="options.editing">
         <label class="item item-input" id="edit-textarea6">
-          <span class="input-label"></span><textarea placeholder="" ng-model="data.note">{{data.note}}</textarea>
+          <span class="input-label"></span>
+          <textarea placeholder="" ng-model="data.note">
+            {{data.note}}
+          </textarea>
         </label>
       </form>
-      <!-- <div id="edit-markdown6" ng-if="!options.editing" ng-bind-html="data.note" class="show-list-numbers-and-dots note-form"></div> -->
       <div
         note-presenter="data"
         ng-if="!options.editing"

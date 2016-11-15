@@ -1,7 +1,11 @@
 <ion-view title="Notes" hide-back-button="true" cache-view="false" id="page2" class="new-note-container">
   <ion-content padding="true" class=" manual-remove-top-padding has-header">
     <ion-list id="notes-list3" class="manual-list-fullwidth">
-      <ion-item class="item-avatar" id="notes-list-item1" ui-sref="tabsController.edit({&quot;id&quot;:&quot;&quot;+item.$id+&quot;&quot;})" collection-repeat="item in list track by $id">
+      <ion-item
+        class="item-avatar"
+        id="notes-list-item1"
+        ui-sref="tabsController.edit({&quot;id&quot;:&quot;&quot;+item.$id+&quot;&quot;})"
+        collection-repeat="item in list | orderBy: '-createdAt' track by $id">
         <h2>{{item.note}}</h2>
         <p>{{item.createdAt | dateFilter: "dateOnly"}}</p>
       </ion-item>
