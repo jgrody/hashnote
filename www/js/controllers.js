@@ -2,24 +2,20 @@ angular.module('app.controllers', [])
 
 .controller('notesCtrl', [
   '$scope',
-  '$stateParams',
-  '$firebaseArray',
-  '$filter',
+  'user',
+  'list',
+  '$state',
 function (
   $scope,
-  $stateParams,
-  $firebaseArray,
-  $filter
+  user,
+  list,
+  $state
 ) {
 
-  $scope.user = firebase.auth().currentUser;
+  $scope.options = {};
+  $scope.options.showDelete = false;
 
-  $scope.$watch('user.uid', function(newVal){
-    if (!newVal) return;
-    var ref = firebase.database().ref();
-    var notes = ref.child($scope.user.uid).child('notes')
-    var list = $firebaseArray(notes);
-
+  list.$loaded(function () {
     $scope.list = list;
 
     // Delete empty notes
@@ -28,10 +24,15 @@ function (
         if (n.note == "") $scope.list.$remove(index);
       })
     })
-
-    console.log('before remove');
   })
 
+  $scope.toggleDelete = function(){
+    $scope.options.showDelete = !$scope.options.showDelete;
+  }
+
+  $scope.remove = function(item){
+    list.$remove(item)
+  }
 
   $scope.goTo = function(item){
     console.log('item', item)
@@ -42,12 +43,14 @@ function (
 .controller('settingsCtrl', [
   '$scope',
   '$state',
+  'user',
   function (
     $scope,
-    $state
+    $state,
+    user
   ) {
 
-  $scope.user = firebase.auth().currentUser;
+  $scope.user = user;
 
   $scope.logout = function(){
     firebase.auth().signOut().then(function() {
@@ -60,29 +63,31 @@ function (
 
 .controller('newPaddCtrl', [
   '$scope',
+  'user',
+  'list',
   '$state',
   '$firebaseArray',
   '$firebaseObject',
   'NoteService',
 function (
   $scope,
+  user,
+  list,
   $state,
   $firebaseArray,
   $firebaseObject,
   NoteService
 ) {
 
-  var ref, notes, list, tagsRef, tags, newNoteObject;
+  $scope.user = user;
 
-  $scope.user = firebase.auth().currentUser;
+  var ref, tagsRef, tags;
+
+  var ref = firebase.database().ref();
+
   $scope.data = {};
 
-  $scope.$watch('user.uid', function(newVal){
-    if (!newVal) return;
-    ref = firebase.database().ref();
-    notes = ref.child($scope.user.uid).child('notes')
-    list = $firebaseArray(notes);
-
+  list.$loaded(function() {
     list.$add({note: ""}).then(function (a) {
       var pathArray = a.path.o.join('/')
       $scope.data = $firebaseObject(ref.child(pathArray))
@@ -102,34 +107,27 @@ function (
 
 .controller('editCtrl', [
   '$scope',
+  'user',
+  'note',
   '$state',
-  '$stateParams',
-  '$firebaseObject',
   'NoteService',
 function (
   $scope,
+  user,
+  note,
   $state,
-  $stateParams,
-  $firebaseObject,
   NoteService
 ) {
+  $scope.user = user;
 
-  $scope.user = firebase.auth().currentUser;
   $scope.data = {};
   $scope.options = {
     editing: false,
     actionText: 'Edit'
   }
 
-  $scope.$watch('user.uid', function(newVal, oldVal){
-    if (!newVal) return;
-    var ref = firebase.database().ref();
-    var note = ref
-    .child($scope.user.uid)
-    .child('notes')
-    .child($stateParams.id)
-
-    $scope.data = $firebaseObject(note)
+  note.$loaded(function() {
+    $scope.data = note;
   })
 
   $scope.performAction = function(){
@@ -148,15 +146,18 @@ function (
     $scope.options.actionText = $scope.options.actionText == 'Save' ? 'Edit' : 'Save';
     $scope.options.editing = !$scope.options.editing;
   }
+
+  $scope.goBack = function(){
+    // $state.go('page1/tab1/page2');
+    $state.go('tabsController.notes')
+  }
 }])
 
 .controller('signupCtrl', [
   '$scope',
-  '$stateParams',
   '$state',
   function (
     $scope,
-    $stateParams,
     $state
   ) {
 

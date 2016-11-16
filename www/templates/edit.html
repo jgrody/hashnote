@@ -1,4 +1,18 @@
-<ion-view title="Edit" hide-back-button="true" cache-view="false" nav-transition="none" id="page11">
+<ion-view
+  title=""
+  hide-back-button="true"
+  cache-view="false"
+  nav-transition="none"
+  id="page11"
+>
+  <ion-nav-buttons side="left" scroll="false" class="has-header">
+    <button
+      class="button icon ion-ios-arrow-back"
+      ng-click="goBack()"
+    >
+      Back
+    </button>
+  </ion-nav-buttons>
   <ion-nav-buttons side="right" scroll="false" class="has-header">
     <button class="button icon No Icon" ng-click="performAction()"> {{options.actionText}}</button>
   </ion-nav-buttons>

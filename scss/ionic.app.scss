@@ -1,6 +1,13 @@
 $calm: #32C7FC;
 $ionicons-font-path: "../lib/ionic/fonts" !default;
 @import "../www/lib/ionic/scss/ionic";
+
+#page2 {
+	a.item-content {
+		padding-left: 16px;
+	}
+}
+
 .new-note-container {
 	display: flex;
 	flex-direction: column;

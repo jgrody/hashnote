@@ -2,48 +2,42 @@ angular.module('app.routes', ['ionicUIRouter'])
 
 .config(function($stateProvider, $urlRouterProvider) {
 
-  // Ionic uses AngularUI Router which uses the concept of states
-  // Learn more here: https://github.com/angular-ui/ui-router
-  // Set up the various states which the app can be in.
-  // Each state's controller can be found in controllers.js
   $stateProvider
-
-
-
-      /*
-    The IonicUIRouter.js UI-Router Modification is being used for this route.
-    To navigate to this route, do NOT use a URL. Instead use one of the following:
-      1) Using the ui-sref HTML attribute:
-        ui-sref='tabsController.notes'
-      2) Using $state.go programatically:
-        $state.go('tabsController.notes');
-    This allows your app to figure out which Tab to open this page in on the fly.
-    If you're setting a Tabs default page or modifying the .otherwise for your app and
-    must use a URL, use one of the following:
-      /page1/tab1/page2
-      /page1/tab2/page2
-      /page1/tab3/page2
-  */
   .state('tabsController.notes', {
     url: '/page2',
+    resolve: {
+      user: [function(){
+        return firebase.auth().currentUser;
+      }],
+      list: ['user', '$firebaseArray', function(user, $firebaseArray){
+        var ref = firebase.database().ref();
+        var notesRef = ref.child(user.uid).child('notes');
+        return $firebaseArray(notesRef);
+      }]
+    },
     views: {
       'tab1': {
         templateUrl: 'templates/notes.html',
-        controller: 'notesCtrl'
+        controller: 'notesCtrl',
       },
       'tab2': {
         templateUrl: 'templates/notes.html',
-        controller: 'notesCtrl'
+        controller: 'notesCtrl',
       },
       'tab3': {
         templateUrl: 'templates/notes.html',
-        controller: 'notesCtrl'
+        controller: 'notesCtrl',
       }
     }
   })
 
   .state('tabsController.settings', {
     url: '/page4',
+    resolve: {
+      user: [function(){
+        return firebase.auth().currentUser;
+      }]
+    },
     views: {
       'tab3': {
         templateUrl: 'templates/settings.html',
@@ -54,6 +48,16 @@ angular.module('app.routes', ['ionicUIRouter'])
 
   .state('tabsController.newPadd', {
     url: '/page8',
+    resolve: {
+      user: [function(){
+        return firebase.auth().currentUser;
+      }],
+      list: ['user', '$firebaseArray', function(user, $firebaseArray){
+        var ref = firebase.database().ref();
+        var notesRef = ref.child(user.uid).child('notes');
+        return $firebaseArray(notesRef);
+      }]
+    },
     views: {
       'tab2': {
         templateUrl: 'templates/newPadd.html',
@@ -63,6 +67,24 @@ angular.module('app.routes', ['ionicUIRouter'])
   })
   .state('tabsController.edit', {
     url: '/page11',
+    resolve: {
+      user: [function(){
+        return firebase.auth().currentUser;
+      }],
+      note: [
+        'user', '$firebaseObject', '$stateParams',
+        function(user, $firebaseObject, $stateParams
+      ){
+        var ref = firebase.database().ref();
+
+        var noteRef = ref
+          .child(user.uid)
+          .child('notes')
+          .child($stateParams.id)
+
+        return $firebaseObject(noteRef);
+      }]
+    },
     params: {
       id: ""
     },
@@ -114,6 +136,12 @@ angular.module('app.routes', ['ionicUIRouter'])
     }
   })
 
-  $urlRouterProvider.otherwise('/page1/tab1/page2')
+  // $urlRouterProvider.otherwise('/page1/tab1/page2')
+
+  $urlRouterProvider.otherwise(function ($injector, $location) {
+    var $state = $injector.get('$state');
+
+    $state.go('tabsController.settings');
+  });
 
 });
