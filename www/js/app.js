@@ -14,7 +14,18 @@ angular.module('app', [
   $sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
 })
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $state) {
+  firebase.auth().onAuthStateChanged(function(user) {
+    console.log('user', user);
+    if (user != null) {
+      $state.go('tabsController.notes');
+      // User is signed in.
+    } else {
+      $state.go('login');
+      // No user is signed in.
+    }
+  });
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)

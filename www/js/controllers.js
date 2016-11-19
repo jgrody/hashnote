@@ -135,9 +135,9 @@ angular.module('app.controllers', [])
   "ngInject";
 
   $scope.data = {
-    'name': '',
-    'email': '',
-    'password': ''
+    name: '',
+    email: '',
+    password: ''
   }
 
   $scope.error='';
@@ -182,10 +182,10 @@ angular.module('app.controllers', [])
 
 .controller('loginCtrl', function($scope, $state) {
   "ngInject";
-  
+
   $scope.data = {
-    'email': '',
-    'password': ''
+    email: '',
+    password: ''
   }
 
   $scope.error = '';
@@ -195,10 +195,7 @@ angular.module('app.controllers', [])
     firebase.auth().signInWithEmailAndPassword(
       $scope.data.email,
       $scope.data.password
-    ).then(function(data){
-      $state.go('tabsController.notes')
-    })
-    .catch(function(error) {
+    ).catch(function(error) {
       console.log('error', error)
       // Handle Errors here.
       var errorCode = error.code;
