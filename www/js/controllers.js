@@ -1,16 +1,12 @@
 angular.module('app.controllers', [])
-
-.controller('notesCtrl', [
-  '$scope',
-  'user',
-  'list',
-  '$state',
-function (
+.controller('notesCtrl', function(
   $scope,
   user,
   list,
   $state
 ) {
+
+  "ngInject";
 
   $scope.options = {};
   $scope.options.showDelete = false;
@@ -38,17 +34,10 @@ function (
     console.log('item', item)
   }
 
-}])
+})
 
-.controller('settingsCtrl', [
-  '$scope',
-  '$state',
-  'user',
-  function (
-    $scope,
-    $state,
-    user
-  ) {
+.controller('settingsCtrl', function($scope, $state, user) {
+  "ngInject";
 
   $scope.user = user;
 
@@ -59,17 +48,9 @@ function (
       console.log('error', error)
     });
   }
-}])
+})
 
-.controller('newPaddCtrl', [
-  '$scope',
-  'user',
-  'list',
-  '$state',
-  '$firebaseArray',
-  '$firebaseObject',
-  'NoteService',
-function (
+.controller('newPaddCtrl', function(
   $scope,
   user,
   list,
@@ -78,6 +59,7 @@ function (
   $firebaseObject,
   NoteService
 ) {
+  "ngInject";
 
   $scope.user = user;
 
@@ -103,21 +85,17 @@ function (
         $state.go('tabsController.notes')
       })
   }
-}])
+})
 
-.controller('editCtrl', [
-  '$scope',
-  'user',
-  'note',
-  '$state',
-  'NoteService',
-function (
+.controller('editCtrl', function(
   $scope,
   user,
   note,
   $state,
   NoteService
 ) {
+  "ngInject";
+
   $scope.user = user;
 
   $scope.data = {};
@@ -151,92 +129,82 @@ function (
     // $state.go('page1/tab1/page2');
     $state.go('tabsController.notes')
   }
-}])
+})
 
-.controller('signupCtrl', [
-  '$scope',
-  '$state',
-  function (
-    $scope,
-    $state
-  ) {
+.controller('signupCtrl', function($scope, $state) {
+  "ngInject";
 
-    $scope.data = {
-      'name': '',
-      'email': '',
-      'password': ''
-    }
+  $scope.data = {
+    'name': '',
+    'email': '',
+    'password': ''
+  }
 
-    $scope.error='';
+  $scope.error='';
 
-    $scope.signup = function(){
-        $scope.error = '';
-        firebase.auth().createUserWithEmailAndPassword(
-          $scope.data.email,
-          $scope.data.password
-        ).then(function(data){
-          firebase.auth().signInWithEmailAndPassword(
-            $scope.data.email,
-            $scope.data.password
-          )
-          .then(function(data){
-            var current = firebase.auth().currentUser;
-            current.updateProfile({
-              displayName: $scope.data.name
-            }).then(function(){
-              $state.go('tabsController.notes')
-            })
-          })
-          .catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            $scope.error = errorMessage;
-            $scope.$apply()
-          });
-        })
-        .catch(function(error) {
-          console.log('error', error)
-          // Handle Errors here.
-          var errorCode = error.code;
-          var errorMessage = error.message;
-          $scope.error = error.message;
-          $scope.$apply()
-        });
-    }
-
-}])
-
-.controller('loginCtrl', [
-  '$scope',
-  '$state',
-  function(
-    $scope,
-    $state
-  ) {
-
-    $scope.data = {
-      'email': '',
-      'password': ''
-    }
-
+  $scope.signup = function(){
     $scope.error = '';
-
-    $scope.login = function(){
-      $scope.error = '';
+    firebase.auth().createUserWithEmailAndPassword(
+      $scope.data.email,
+      $scope.data.password
+    ).then(function(data){
       firebase.auth().signInWithEmailAndPassword(
         $scope.data.email,
         $scope.data.password
-      ).then(function(data){
-        $state.go('tabsController.notes')
+      )
+      .then(function(data){
+        var current = firebase.auth().currentUser;
+        current.updateProfile({
+          displayName: $scope.data.name
+        }).then(function(){
+          $state.go('tabsController.notes')
+        })
       })
       .catch(function(error) {
-        console.log('error', error)
         // Handle Errors here.
         var errorCode = error.code;
         var errorMessage = error.message;
         $scope.error = errorMessage;
         $scope.$apply()
-      })
-    }
-}])
+      });
+    })
+    .catch(function(error) {
+      console.log('error', error)
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      $scope.error = error.message;
+      $scope.$apply()
+    });
+  }
+
+})
+
+.controller('loginCtrl', function($scope, $state) {
+  "ngInject";
+  
+  $scope.data = {
+    'email': '',
+    'password': ''
+  }
+
+  $scope.error = '';
+
+  $scope.login = function(){
+    $scope.error = '';
+    firebase.auth().signInWithEmailAndPassword(
+      $scope.data.email,
+      $scope.data.password
+    ).then(function(data){
+      $state.go('tabsController.notes')
+    })
+    .catch(function(error) {
+      console.log('error', error)
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      $scope.error = errorMessage;
+      $scope.$apply()
+    })
+  }
+})

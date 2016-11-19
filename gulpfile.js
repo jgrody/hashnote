@@ -9,6 +9,7 @@ var sh = require('shelljs');
 var browserify = require('browserify');
 var vinylSource = require('vinyl-source-stream');
 var stringify = require('stringify');
+var ngAnnotate = require('gulp-ng-annotate');
 
 var paths = {
   sass: ['./scss/**/*.scss'],
@@ -45,6 +46,7 @@ gulp.task('browserify', function() {
     this.emit("end");
   })
   .pipe(vinylSource('bundle.js'))
+  .pipe(ngAnnotate())
   .pipe(gulp.dest('./www/dist'));
 });
 

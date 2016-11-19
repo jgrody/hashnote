@@ -11,11 +11,11 @@ angular.module('app', [
   'ngSanitize',
 ])
 
-.config(function($ionicConfigProvider, $sceDelegateProvider){
+.config(["$ionicConfigProvider", "$sceDelegateProvider", function($ionicConfigProvider, $sceDelegateProvider){
   $sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
-})
+}])
 
-.run(function($ionicPlatform) {
+.run(["$ionicPlatform", function($ionicPlatform) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -28,7 +28,7 @@ angular.module('app', [
       StatusBar.styleDefault();
     }
   });
-})
+}])
 
 .directive('disableSideMenuDrag', ['$ionicSideMenuDelegate', '$rootScope', function($ionicSideMenuDelegate, $rootScope) {
   return {
