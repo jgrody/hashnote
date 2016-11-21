@@ -3,25 +3,17 @@ angular.module('app.directives', [])
 .directive('notePresenter', [function(){
   return {
     scope: true,
-    controller: [
-      '$scope',
-      '$element',
-      '$attrs',
-      '$parse',
-      '$compile',
-      '$state',
-      '$firebaseArray',
-      'HashtagService',
-      function(
-        $scope,
-        $element,
-        $attrs,
-        $parse,
-        $compile,
-        $state,
-        $firebaseArray,
-        HashtagService
-      ){
+    controller: function(
+      $scope,
+      $element,
+      $attrs,
+      $parse,
+      $compile,
+      $state,
+      $firebaseArray,
+      HashtagService
+    ){
+      "ngInject";
 
       var data = $parse($attrs.notePresenter)($scope);
 
@@ -35,8 +27,10 @@ angular.module('app.directives', [])
         }
       })
 
-      $scope.goToHashtag = function(){
-        console.log('goToHashtag');
+      $scope.goToHashtag = function($event){
+        var tag = $event.currentTarget.text;
+        tag = tag.replace("#", '');
+        $state.go('tabsController.notes', {tag: tag})
       }
 
       function parseTags(){
@@ -47,6 +41,6 @@ angular.module('app.directives', [])
           $element.append(element[0]);
         }
       }
-    }]
+    }
   }
 }]);

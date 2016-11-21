@@ -10,14 +10,20 @@ angular.module('app', [
   'ngSanitize',
 ])
 
-.config(function($ionicConfigProvider, $sceDelegateProvider){
+.config(function($ionicConfigProvider, $sceDelegateProvider, $animateProvider){
+  "ngInject";
+
   $sceDelegateProvider.resourceUrlWhitelist([ 'self','*://www.youtube.com/**', '*://player.vimeo.com/video/**']);
+
+  $animateProvider.classNameFilter(/angular-animate/);
 })
 
-.run(function($ionicPlatform, $state) {
+.run(function($ionicPlatform, $state, $rootScope) {
+  "ngInject";
+
   firebase.auth().onAuthStateChanged(function(user) {
-    console.log('user', user);
     if (user != null) {
+      $rootScope.user = user;
       $state.go('tabsController.notes');
       // User is signed in.
     } else {
@@ -40,10 +46,13 @@ angular.module('app', [
   });
 })
 
-.directive('disableSideMenuDrag', ['$ionicSideMenuDelegate', '$rootScope', function($ionicSideMenuDelegate, $rootScope) {
+.directive('disableSideMenuDrag', function($ionicSideMenuDelegate, $rootScope) {
+  "ngInject";
+
   return {
     restrict: "A",
-    controller: ['$scope', '$element', '$attrs', function ($scope, $element, $attrs) {
+    controller: function ($scope, $element, $attrs) {
+      "ngInject";
 
       function stopDrag(){
         $ionicSideMenuDelegate.canDragContent(false);
@@ -59,6 +68,6 @@ angular.module('app', [
       $element.on('mousedown', stopDrag);
       $element.on('mouseup', allowDrag);
 
-    }]
+    }
   };
-}])
+})

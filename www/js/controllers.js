@@ -3,13 +3,16 @@ angular.module('app.controllers', [])
   $scope,
   user,
   list,
-  $state
+  $state,
+  $stateParams
 ) {
 
   "ngInject";
 
   $scope.options = {};
   $scope.options.showDelete = false;
+  $scope.options.showSearch = false;
+  $scope.options.search = $stateParams.tag;
 
   list.$loaded(function () {
     $scope.list = list;
@@ -17,7 +20,7 @@ angular.module('app.controllers', [])
     // Delete empty notes
     $scope.list.$loaded(function (notesArray) {
       notesArray.each(function (n, index) {
-        if (n.note == "") $scope.list.$remove(index);
+        if (!n.note) $scope.list.$remove(index);
       })
     })
   })
@@ -26,14 +29,13 @@ angular.module('app.controllers', [])
     $scope.options.showDelete = !$scope.options.showDelete;
   }
 
+  $scope.toggleSearch = function(){
+    $scope.options.showSearch = !$scope.options.showSearch;
+  }
+
   $scope.remove = function(item){
     list.$remove(item)
   }
-
-  $scope.goTo = function(item){
-    console.log('item', item)
-  }
-
 })
 
 .controller('settingsCtrl', function($scope, $state, user) {
@@ -53,9 +55,9 @@ angular.module('app.controllers', [])
 .controller('newPaddCtrl', function(
   $scope,
   user,
-  list,
+  notes,
+  tags,
   $state,
-  $firebaseArray,
   $firebaseObject,
   NoteService
 ) {
@@ -63,20 +65,15 @@ angular.module('app.controllers', [])
 
   $scope.user = user;
 
-  var ref, tagsRef, tags;
-
   var ref = firebase.database().ref();
 
   $scope.data = {};
 
-  list.$loaded(function() {
-    list.$add({note: ""}).then(function (a) {
+  notes.$loaded(function() {
+    notes.$add({note: ""}).then(function (a) {
       var pathArray = a.path.o.join('/')
       $scope.data = $firebaseObject(ref.child(pathArray))
     })
-
-    tagsRef = ref.child('tags');
-    tags = $firebaseArray(tagsRef);
   })
 
   $scope.update = function(){

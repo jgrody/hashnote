@@ -9,34 +9,39 @@ angular.module('app.routes', ['ionicUIRouter'])
       user: [function(){
         return firebase.auth().currentUser;
       }],
-      list: ['user', '$firebaseArray', function(user, $firebaseArray){
+      list: function(user, $firebaseArray, $stateParams){
+        "ngInject";
+
         var ref = firebase.database().ref();
         var notesRef = ref.child(user.uid).child('notes');
         return $firebaseArray(notesRef);
-      }]
+      }
+    },
+    params: {
+      tag: ""
     },
     views: {
       'tab1': {
         templateUrl: 'templates/notes.html',
         controller: 'notesCtrl',
       },
-      'tab2': {
-        templateUrl: 'templates/notes.html',
-        controller: 'notesCtrl',
-      },
-      'tab3': {
-        templateUrl: 'templates/notes.html',
-        controller: 'notesCtrl',
-      }
+    //   'tab2': {
+    //     templateUrl: 'templates/notes.html',
+    //     controller: 'notesCtrl',
+    //   },
+    //   'tab3': {
+    //     templateUrl: 'templates/notes.html',
+    //     controller: 'notesCtrl',
+    //   }
     }
   })
 
   .state('tabsController.settings', {
     url: '/page4',
     resolve: {
-      user: [function(){
+      user: function(){
         return firebase.auth().currentUser;
-      }]
+      }
     },
     views: {
       'tab3': {
@@ -52,11 +57,20 @@ angular.module('app.routes', ['ionicUIRouter'])
       user: [function(){
         return firebase.auth().currentUser;
       }],
-      list: ['user', '$firebaseArray', function(user, $firebaseArray){
+      notes: function(user, $firebaseArray){
+        "ngInject";
+
         var ref = firebase.database().ref();
         var notesRef = ref.child(user.uid).child('notes');
         return $firebaseArray(notesRef);
-      }]
+      },
+      tags: function($firebaseArray){
+        "ngInject";
+
+        var ref = firebase.database().ref();
+        var tagsRef = ref.child('tags');
+        return $firebaseArray(tagsRef);
+      }
     },
     views: {
       'tab2': {
@@ -71,10 +85,9 @@ angular.module('app.routes', ['ionicUIRouter'])
       user: [function(){
         return firebase.auth().currentUser;
       }],
-      note: [
-        'user', '$firebaseObject', '$stateParams',
-        function(user, $firebaseObject, $stateParams
-      ){
+      note: function(user, $firebaseObject, $stateParams){
+        "ngInject";
+
         var ref = firebase.database().ref();
 
         var noteRef = ref
@@ -83,7 +96,7 @@ angular.module('app.routes', ['ionicUIRouter'])
           .child($stateParams.id)
 
         return $firebaseObject(noteRef);
-      }]
+      }
     },
     params: {
       id: ""
@@ -109,31 +122,35 @@ angular.module('app.routes', ['ionicUIRouter'])
     templateUrl: 'templates/tabsController.html',
     abstract:true
   })
-  .state('tabsController.signup', {
+  .state('signup', {
     url: '/page5',
-    views: {
-      'tab2': {
-        templateUrl: 'templates/signup.html',
-        controller: 'signupCtrl'
-      },
-      'tab3': {
-        templateUrl: 'templates/signup.html',
-        controller: 'signupCtrl'
-      }
-    }
+    templateUrl: '/templates/signup.html',
+    controller: 'signupCtrl'
+    // views: {
+    //   'tab2': {
+    //     templateUrl: 'templates/signup.html',
+    //     controller: 'signupCtrl'
+    //   },
+    //   'tab3': {
+    //     templateUrl: 'templates/signup.html',
+    //     controller: 'signupCtrl'
+    //   }
+    // }
   })
-  .state('tabsController.login', {
+  .state('login', {
     url: '/page6',
-    views: {
-      'tab2': {
-        templateUrl: 'templates/login.html',
-        controller: 'loginCtrl'
-      },
-      'tab3': {
-        templateUrl: 'templates/login.html',
-        controller: 'loginCtrl'
-      }
-    }
+    templateUrl: '/templates/login.html',
+    controller: 'loginCtrl'
+    // views: {
+    //   'tab2': {
+    //     templateUrl: 'templates/login.html',
+    //     controller: 'loginCtrl'
+    //   },
+    //   'tab3': {
+    //     templateUrl: 'templates/login.html',
+    //     controller: 'loginCtrl'
+    //   }
+    // }
   })
 
   // $urlRouterProvider.otherwise('/page1/tab1/page2')
@@ -141,7 +158,7 @@ angular.module('app.routes', ['ionicUIRouter'])
   $urlRouterProvider.otherwise(function ($injector, $location) {
     var $state = $injector.get('$state');
 
-    $state.go('tabsController.settings');
+    $state.go('tabsController.notes');
   });
 
 });
