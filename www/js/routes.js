@@ -122,10 +122,8 @@ angular.module('app.routes', ['ionicUIRouter'])
     templateUrl: 'templates/tabsController.html',
     abstract:true
   })
-  .state('signup', {
+  .state('tabsController.signup', {
     url: '/page5',
-    templateUrl: '/templates/signup.html',
-    controller: 'signupCtrl',
     views: {
       'tab2': {
         templateUrl: 'templates/signup.html',
@@ -137,10 +135,8 @@ angular.module('app.routes', ['ionicUIRouter'])
       }
     }
   })
-  .state('login', {
+  .state('tabsController.login', {
     url: '/page6',
-    templateUrl: '/templates/login.html',
-    controller: 'loginCtrl',
     views: {
       'tab2': {
         templateUrl: 'templates/login.html',

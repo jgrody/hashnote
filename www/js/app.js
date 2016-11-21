@@ -27,7 +27,7 @@ angular.module('app', [
       $state.go('tabsController.notes');
       // User is signed in.
     } else {
-      $state.go('login');
+      $state.go('tabsController.login');
       // No user is signed in.
     }
   });
