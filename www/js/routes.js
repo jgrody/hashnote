@@ -158,7 +158,7 @@ angular.module('app.routes', ['ionicUIRouter'])
   $urlRouterProvider.otherwise(function ($injector, $location) {
     var $state = $injector.get('$state');
 
-    $state.go('tabsController.notes');
+    $state.go('tabsController.settings');
   });
 
 });
