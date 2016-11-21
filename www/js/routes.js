@@ -25,14 +25,14 @@ angular.module('app.routes', ['ionicUIRouter'])
         templateUrl: 'templates/notes.html',
         controller: 'notesCtrl',
       },
-    //   'tab2': {
-    //     templateUrl: 'templates/notes.html',
-    //     controller: 'notesCtrl',
-    //   },
-    //   'tab3': {
-    //     templateUrl: 'templates/notes.html',
-    //     controller: 'notesCtrl',
-    //   }
+      'tab2': {
+        templateUrl: 'templates/notes.html',
+        controller: 'notesCtrl',
+      },
+      'tab3': {
+        templateUrl: 'templates/notes.html',
+        controller: 'notesCtrl',
+      }
     }
   })
 
